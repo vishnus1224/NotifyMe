@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NotifyMe</string>
+    <string name="enter_customer_details">Enter customer details</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_address">Enter address</string>
+    <string name="enter_phone_number">Enter phone number</string>
+</resources>
