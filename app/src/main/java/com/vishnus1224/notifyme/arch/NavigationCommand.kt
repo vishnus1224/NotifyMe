@@ -1,13 +1,13 @@
 package com.vishnus1224.notifyme.arch
 
-import com.vishnus1224.notifyme.feature.customer.data.Customer
-
 interface NavigationCommand
 
-data class GoToCustomerDetailsCommand(
-    val customer: Customer
+data class GoToDestinationCommand(
+    val route: String,
+    val navigationOptions: NavigationOptions? = null,
 ) : NavigationCommand
 
-class GoToCustomerListCommand : NavigationCommand
-
-class AddNewCustomerCommand : NavigationCommand
+data class NavigationOptions(
+    val launchSingleTop: Boolean = false,
+    val popUpToRoute: String? = null,
+)

@@ -1,13 +1,13 @@
-package com.vishnus1224.notifyme.feature.customer.logic
+package com.vishnus1224.notifyme.feature.customer.listing
 
 import com.vishnus1224.notifyme.arch.BaseViewModel
 import com.vishnus1224.notifyme.feature.customer.data.Customer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
-import com.vishnus1224.notifyme.feature.customer.logic.ListCustomerAction as Action
-import com.vishnus1224.notifyme.feature.customer.logic.ListCustomerResult as Result
-import com.vishnus1224.notifyme.feature.customer.logic.ListCustomerState as State
+import com.vishnus1224.notifyme.feature.customer.listing.ListCustomerAction as Action
+import com.vishnus1224.notifyme.feature.customer.listing.ListCustomerResult as Result
+import com.vishnus1224.notifyme.feature.customer.listing.ListCustomerState as State
 
 @HiltViewModel
 class ListCustomerViewModel
@@ -17,9 +17,9 @@ class ListCustomerViewModel
     private val router: ListCustomerRouter,
 ) : BaseViewModel<Action, Result, State>(interactor, dispatcher, router) {
 
-    init {
-        sendAction(Action.Init)
-    }
+    fun getAllCustomers() = sendAction(
+        Action.GetAllCustomers
+    )
 
     fun onCustomerClick(customer: Customer) = sendAction(
         Action.CustomerClicked(customer)

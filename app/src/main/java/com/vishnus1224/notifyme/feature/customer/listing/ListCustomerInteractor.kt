@@ -1,4 +1,4 @@
-package com.vishnus1224.notifyme.feature.customer.logic
+package com.vishnus1224.notifyme.feature.customer.listing
 
 import com.vishnus1224.notifyme.arch.Interactor
 import com.vishnus1224.notifyme.feature.customer.data.Customer
@@ -6,8 +6,8 @@ import com.vishnus1224.notifyme.feature.customer.data.CustomerRepository
 import java.lang.Exception
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
-import com.vishnus1224.notifyme.feature.customer.logic.ListCustomerAction as Action
-import com.vishnus1224.notifyme.feature.customer.logic.ListCustomerResult as Result
+import com.vishnus1224.notifyme.feature.customer.listing.ListCustomerAction as Action
+import com.vishnus1224.notifyme.feature.customer.listing.ListCustomerResult as Result
 
 class ListCustomerInteractor
 @Inject constructor(
@@ -16,7 +16,7 @@ class ListCustomerInteractor
 
     override suspend fun process(action: Action) {
         when (action) {
-            is Action.Init -> getAllCustomers()
+            is Action.GetAllCustomers -> getAllCustomers()
             is Action.AddCustomer -> addNewCustomer()
             is Action.CustomerClicked -> customerClicked(action.customer)
         }

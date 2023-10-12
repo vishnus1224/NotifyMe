@@ -1,4 +1,4 @@
-package com.vishnus1224.notifyme.feature.customer.ui
+package com.vishnus1224.notifyme.feature.customer.listing
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,19 +20,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vishnus1224.notifyme.arch.NavigationCommand
 import com.vishnus1224.notifyme.feature.customer.data.Customer
-import com.vishnus1224.notifyme.feature.customer.logic.ListCustomerState
-import com.vishnus1224.notifyme.feature.customer.logic.ListCustomerViewModel
 
 @Composable
 fun ListCustomerScreen(
-    viewModel: ListCustomerViewModel,
-    navigator: (NavigationCommand) -> Unit,
-    modifier: Modifier = Modifier,
+  viewModel: ListCustomerViewModel,
+  navigator: (NavigationCommand) -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-
     val state = viewModel.state().collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = viewModel) {
+
+        viewModel.getAllCustomers()
+
         viewModel.navigation().collect(navigator)
     }
 
@@ -42,15 +42,14 @@ fun ListCustomerScreen(
         onAddClick = viewModel::onAddCustomerClick,
         modifier = modifier,
     )
-
 }
 
 @Composable
 private fun ListCustomerScreen(
-    state: ListCustomerState,
-    onCustomerClick: (Customer) -> Unit,
-    onAddClick: () -> Unit,
-    modifier: Modifier,
+  state: ListCustomerState,
+  onCustomerClick: (Customer) -> Unit,
+  onAddClick: () -> Unit,
+  modifier: Modifier,
 ) {
 
     Column(
@@ -78,12 +77,16 @@ private fun ListCustomerScreen(
                     )
                 }
             }
-        } else if (state.errorMessage.isNotBlank()) {
-            Text(text = state.errorMessage)
-        } else if (state.inProgress) {
-            CircularProgressIndicator()
-        } else {
+        } else if (state.inProgress.not()) {
             Text(text = "No customers found")
+        }
+
+        if (state.errorMessage.isNotBlank()) {
+            Text(text = state.errorMessage)
+        }
+
+        if (state.inProgress) {
+            CircularProgressIndicator()
         }
     }
 }
@@ -94,7 +97,7 @@ private fun ListCustomerScreenPreview() {
     ListCustomerScreen(
         state = ListCustomerState(
             customers = listOf(
-                Customer("abc", "122, Downing Street", "+4432839992", 0L)
+                Customer("","abc", "122, Downing Street", "+4432839992", 0L)
             ),
             inProgress = false,
             errorMessage = "",

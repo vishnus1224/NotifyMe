@@ -1,21 +1,31 @@
-package com.vishnus1224.notifyme.feature.customer.logic
+package com.vishnus1224.notifyme.feature.customer.detail
 
+import androidx.lifecycle.SavedStateHandle
 import com.vishnus1224.notifyme.arch.BaseViewModel
 import com.vishnus1224.notifyme.feature.customer.data.Customer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
-import com.vishnus1224.notifyme.feature.customer.logic.AddCustomerAction as Action
-import com.vishnus1224.notifyme.feature.customer.logic.AddCustomerResult as Result
-import com.vishnus1224.notifyme.feature.customer.logic.AddCustomerState as State
+import com.vishnus1224.notifyme.feature.customer.detail.CustomerDetailsAction as Action
+import com.vishnus1224.notifyme.feature.customer.detail.CustomerDetailsResult as Result
+import com.vishnus1224.notifyme.feature.customer.detail.CustomerDetailsState as State
 
 @HiltViewModel
-class AddCustomerViewModel
+class CustomerDetailsViewModel
 @Inject constructor(
-    interactor: AddCustomerInteractor,
+    interactor: CustomerDetailsInteractor,
     dispatcher: CoroutineDispatcher,
-    private val router: AddCustomerRouter
+    private val router: CustomerDetailsRouter,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<Action, Result, State>(interactor, dispatcher, router) {
+
+    private val customerId: String? = savedStateHandle["customerId"]
+
+    init {
+      sendAction(
+          Action.Init(customerId)
+      )
+    }
 
     override fun initialState(): State = State(
         name = "",
@@ -33,7 +43,16 @@ class AddCustomerViewModel
             is Result.UpdatePhoneNumber -> updateCustomerPhoneNumber(result.phoneNumber, state)
             is Result.ErrorWhileSavingCustomer -> handleError(result, state)
             is Result.InProgress -> state.copy(inProgress = result.inProgress)
+            is Result.ShowCustomerDetails -> showCustomerDetails(result.customer, state)
         }
+    }
+
+    private fun showCustomerDetails(customer: Customer, state: State): State {
+        return state.copy(
+            name = customer.name,
+            address = customer.address,
+            phoneNumber = customer.phoneNumber,
+        )
     }
 
     private fun updateCustomerAddress(address: String, state: State): State {
@@ -62,7 +81,10 @@ class AddCustomerViewModel
 
     fun onSaveCustomerClicked(name: String, address: String, phoneNumber: String) = sendAction(
         Action.SaveCustomer(
-            customer = Customer(phoneNumber, name, address, System.currentTimeMillis())
+            customerId = customerId,
+            phoneNumber = phoneNumber,
+            name = name,
+            address = address,
         )
     )
 

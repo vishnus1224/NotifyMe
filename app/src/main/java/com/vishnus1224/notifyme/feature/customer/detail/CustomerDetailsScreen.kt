@@ -1,4 +1,4 @@
-package com.vishnus1224.notifyme.feature.customer.ui
+package com.vishnus1224.notifyme.feature.customer.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,12 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vishnus1224.notifyme.R
 import com.vishnus1224.notifyme.arch.NavigationCommand
-import com.vishnus1224.notifyme.feature.customer.logic.AddCustomerState
-import com.vishnus1224.notifyme.feature.customer.logic.AddCustomerViewModel
 
 @Composable
-fun AddCustomerScreen(
-    viewModel: AddCustomerViewModel,
+fun CustomerDetailsScreen(
+    viewModel: CustomerDetailsViewModel,
     navigator: (NavigationCommand) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -35,7 +33,7 @@ fun AddCustomerScreen(
         viewModel.navigation().collect(navigator)
     }
 
-    AddCustomerScreen(
+    CustomerDetailsScreen(
         state = state.value,
         onNameChanged = viewModel::onNameChanged,
         onAddressChanged = viewModel::onAddressChanged,
@@ -46,8 +44,8 @@ fun AddCustomerScreen(
 }
 
 @Composable
-private fun AddCustomerScreen(
-    state: AddCustomerState,
+private fun CustomerDetailsScreen(
+    state: CustomerDetailsState,
     onNameChanged: (String) -> Unit,
     onAddressChanged: (String) -> Unit,
     onPhoneNumberChanged: (String) -> Unit,
@@ -70,8 +68,7 @@ private fun AddCustomerScreen(
         TextField(
             value = state.name,
             onValueChange = { onNameChanged(it) },
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(text = stringResource(id = R.string.enter_name))
             },
@@ -80,8 +77,7 @@ private fun AddCustomerScreen(
         TextField(
             value = state.address,
             onValueChange = { onAddressChanged(it) },
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(text = stringResource(id = R.string.enter_address))
             },
@@ -90,8 +86,7 @@ private fun AddCustomerScreen(
         TextField(
             value = state.phoneNumber,
             onValueChange = { onPhoneNumberChanged(it) },
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(text = stringResource(id = R.string.enter_phone_number))
             },
@@ -100,7 +95,10 @@ private fun AddCustomerScreen(
             ),
         )
 
-        Button(onClick = { onSaveClicked(state.name, state.address, state.phoneNumber) }) {
+        Button(
+            onClick = { onSaveClicked(state.name, state.address, state.phoneNumber) },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             Text(text = "save")
         }
     }
@@ -108,9 +106,9 @@ private fun AddCustomerScreen(
 
 @Preview
 @Composable
-private fun AddCustomerScreenPreview() {
-    AddCustomerScreen(
-        state = AddCustomerState(
+private fun CustomerDetailsScreenPreview() {
+    CustomerDetailsScreen(
+        state = CustomerDetailsState(
             name = "abc",
             address = "122 Downling Street",
             phoneNumber = "+44894928884",

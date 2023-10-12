@@ -1,9 +1,9 @@
-package com.vishnus1224.notifyme.feature.customer.logic
+package com.vishnus1224.notifyme.feature.customer.listing
 
 import com.vishnus1224.notifyme.feature.customer.data.Customer
 
 sealed class ListCustomerAction {
-    object Init : ListCustomerAction()
+    object GetAllCustomers : ListCustomerAction()
     object AddCustomer : ListCustomerAction()
     data class CustomerClicked(val customer: Customer) : ListCustomerAction()
 }
