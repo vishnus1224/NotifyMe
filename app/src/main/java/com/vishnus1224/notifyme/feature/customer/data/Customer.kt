@@ -10,7 +10,15 @@ class Customer(
     var name: String,
     var address: String,
     var createdAt: Long,
+    var reminderDate: Long?
 ) : RealmObject {
 
-    constructor(): this("","", "", "", System.currentTimeMillis())
+    constructor(): this(
+        id = "",
+        phoneNumber = "",
+        name = "",
+        address= "",
+        createdAt = System.currentTimeMillis(),
+        reminderDate = null,
+    )
 }

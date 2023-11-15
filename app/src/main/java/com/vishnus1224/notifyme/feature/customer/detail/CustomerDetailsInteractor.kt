@@ -3,6 +3,7 @@ package com.vishnus1224.notifyme.feature.customer.detail
 import com.vishnus1224.notifyme.arch.Interactor
 import com.vishnus1224.notifyme.feature.customer.data.Customer
 import com.vishnus1224.notifyme.feature.customer.data.CustomerRepository
+import com.vishnus1224.notifyme.feature.customer.detail.CustomerDetailsAction
 import java.util.UUID
 import javax.inject.Inject
 import com.vishnus1224.notifyme.feature.customer.detail.CustomerDetailsAction as Action
@@ -20,6 +21,9 @@ class CustomerDetailsInteractor
       is Action.AddressChanged -> customerAddressUpdated(action.address)
       is Action.PhoneNumberChanged -> customerPhoneUpdated(action.phoneNumber)
       is Action.SaveCustomer -> saveCustomer(action)
+      is CustomerDetailsAction.ReminderDateSelected -> reminderDateUpdated(action.dateMillis)
+      is CustomerDetailsAction.DismissDatePicker -> dismissDatePicker()
+      is CustomerDetailsAction.SelectDate -> showDatePicker()
     }
   }
 
@@ -50,16 +54,31 @@ class CustomerDetailsInteractor
       name = action.name,
       address = action.address,
       createdAt = existingCustomer?.createdAt ?: System.currentTimeMillis(),
+      reminderDate = action.reminderDate,
     )
 
     customerRepository.saveCustomer(
       customer = customerToSave,
     )
 
+    setReminder(action.reminderDate)
+
     sendResults(
       Result.InProgress(false),
       Result.CustomerSaved,
     )
+  }
+
+  private suspend fun setReminder(reminderDate: Long) {
+
+  }
+
+  private suspend fun reminderDateUpdated(dateMillis: Long?) {
+    sendResults(Result.UpdateReminderDate(dateMillis))
+  }
+
+  private suspend fun dismissDatePicker() {
+    sendResults(Result.DismissDatePicker)
   }
 
   private suspend fun customerNameUpdated(name: String) {
@@ -72,6 +91,10 @@ class CustomerDetailsInteractor
 
   private suspend fun customerPhoneUpdated(phoneNumber: String) {
     sendResults(Result.UpdatePhoneNumber(phoneNumber))
+  }
+
+  private suspend fun showDatePicker() {
+    sendResults(Result.ShowDatePicker)
   }
 
   override fun destroy() {

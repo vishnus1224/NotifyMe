@@ -114,7 +114,7 @@ private fun ListCustomerScreenPreview() {
   ListCustomerScreen(
     state = ListCustomerState(
       customers = listOf(
-        Customer("", "abc", "122, Downing Street", "+4432839992", 0L)
+        Customer("", "abc", "122, Downing Street", "+4432839992", 0L, null)
       ),
       inProgress = false,
       errorMessage = "",
